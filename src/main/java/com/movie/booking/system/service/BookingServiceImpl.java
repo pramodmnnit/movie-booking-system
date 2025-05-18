@@ -9,7 +9,6 @@ import com.movie.booking.system.repository.BookingRepository;
 import com.movie.booking.system.util.DateUtil;
 import org.joda.time.DateTime;
 
-import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -35,11 +34,15 @@ public class BookingServiceImpl implements BookingService {
         try {
             reentrantLocks = seatService.getSeatLocks(seats, show, showDate);
             seatService.validateSeats(seats);
-            Time endTime = show.getEndTime();
             DateTime startDateTime = DateUtil.getDateTimeByDateAndTime(showDate, show.getStartTime());
-            DateTime endDateTime = DateUtil.getDateTimeByDateAndTime(showDate, endTime);
+            DateTime endDateTime = DateUtil.getDateTimeByDateAndTime(showDate, show.getEndTime());
             Map<SeatType, Pricing> seatTypeToPricingMap = pricingService.getSeatTypeToPricingMap(startDateTime, endDateTime, show.getId());
-            Double totalAmount = pricingService.calculateTotalAmount(seats, seatTypeToPricingMap);
+            Double totalAmount = 0.0;
+            Double amount = 0.0;
+            for (Seat seat : seats) {
+                amount += pricingService.calculatePriceWithStrategy(seat, show, startDateTime);
+            }
+            totalAmount = amount;
             Double taxAmount = pricingService.getTaxAmount(totalAmount);
             try {
                 seatService.bookSeats(seats);
@@ -85,5 +88,10 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setStatus(BookingStatus.CANCELLED);
         bookingRepository.saveBooking(booking);
+    }
+
+    @Override
+    public Booking getBookingById(String bookingId) throws InvalidBookingException {
+        return bookingRepository.getBookingById(bookingId);
     }
 }

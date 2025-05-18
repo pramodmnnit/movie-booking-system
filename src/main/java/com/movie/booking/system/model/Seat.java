@@ -10,12 +10,11 @@ import java.util.concurrent.locks.ReentrantLock;
 @Data
 public class Seat {
 
+    private final ConcurrentHashMap<String, ReentrantLock> lockMap = new ConcurrentHashMap<>();
     private String id;
     private Integer seatNumber;
     private SeatType type;
     private SeatStatus status;
-
-    private final ConcurrentHashMap<String, ReentrantLock> lockMap = new ConcurrentHashMap<>();
 
     public boolean isAvailable() {
         return this.status == SeatStatus.AVAILABLE;

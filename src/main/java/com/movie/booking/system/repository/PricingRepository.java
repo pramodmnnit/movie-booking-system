@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 import java.util.List;
 
 public interface PricingRepository {
-    void save(Pricing pricing);
+    void savePricing(Pricing pricing);
 
     Pricing getPricingById(String id);
 

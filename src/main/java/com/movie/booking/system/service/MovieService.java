@@ -1,12 +1,12 @@
-package com.movie.booking.system.repository;
+package com.movie.booking.system.service;
 
 import com.movie.booking.system.exception.InvalidMovieException;
 import com.movie.booking.system.model.Movie;
 
-public interface MovieRepository {
+public interface MovieService {
+    void saveMovie(Movie movie) throws InvalidMovieException;
+
     Movie getMovieById(String id);
 
     Movie getMovieByName(String name);
-
-    void saveMovie(Movie movie) throws InvalidMovieException;
 }

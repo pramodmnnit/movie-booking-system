@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Movie {
 
-    private String movieId;
+    private String id;
     private String name;
     private String description;
     private String genre;

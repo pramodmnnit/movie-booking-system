@@ -10,7 +10,7 @@ public class PricingRepositoryImpl implements PricingRepository {
     private final Map<String, Pricing> pricingMap = new HashMap<>();
 
     @Override
-    public void save(Pricing pricing) {
+    public void savePricing(Pricing pricing) {
         if (Objects.nonNull(pricing)) {
             pricingMap.put(pricing.getId(), pricing);
         }

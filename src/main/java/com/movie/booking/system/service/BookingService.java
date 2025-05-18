@@ -16,4 +16,6 @@ public interface BookingService {
     Booking createBooking(User user, Show show, List<Seat> seats, Date showDate) throws UnavailableSeatException, InvalidPricingException, InvalidBookingException, InvalidSeatException, InterruptedException;
 
     void cancelBooking(String bookingId) throws InvalidBookingException, InvalidSeatException;
+
+    Booking getBookingById(String bookingId) throws InvalidBookingException;
 }

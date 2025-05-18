@@ -4,7 +4,10 @@ import com.movie.booking.system.exception.InvalidPricingException;
 import com.movie.booking.system.model.Pricing;
 import com.movie.booking.system.model.Seat;
 import com.movie.booking.system.model.SeatType;
+import com.movie.booking.system.model.Show;
 import com.movie.booking.system.repository.PricingRepository;
+import com.movie.booking.system.strategy.PricingStrategy;
+import com.movie.booking.system.strategy.PricingStrategyFactory;
 import org.joda.time.DateTime;
 import org.springframework.util.CollectionUtils;
 
@@ -57,5 +60,16 @@ public class PricingServiceImpl implements PricingService {
     @Override
     public Double getTaxAmount(Double amount) {
         return amount * TAX_RATE;
+    }
+
+    @Override
+    public void savePricing(Pricing pricing) throws InvalidPricingException {
+        pricingRepository.savePricing(pricing);
+    }
+
+    @Override
+    public double calculatePriceWithStrategy(Seat seat, Show show, DateTime showDate) {
+        PricingStrategy strategy = PricingStrategyFactory.getPricingStrategy(showDate);
+        return strategy.calculatePrice(seat, show, showDate);
     }
 }
