@@ -4,4 +4,7 @@ import com.movie.booking.system.model.Show;
 
 public interface ShowService {
     void saveShow(Show show);
+
+    Show getShowById(String showId);
+
 }

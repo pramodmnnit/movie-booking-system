@@ -2,9 +2,12 @@ package com.movie.booking.system.repository;
 
 import com.movie.booking.system.model.Pricing;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+
+@Repository
 public class PricingRepositoryImpl implements PricingRepository {
 
     private final Map<String, Pricing> pricingMap = new HashMap<>();

@@ -1,4 +1,4 @@
-package com.movie.booking.system.strategy;
+package com.movie.booking.system.pattern.strategy;
 
 import org.joda.time.DateTime;
 

@@ -17,6 +17,8 @@ public class Booking {
     private Double amount;
     private Double tax;
     private Double totalAmount;
-    private DateTime cratedAt;
+    private DateTime createdAt;
     private DateTime updatedAt;
+    private Screen screen;
+    private Theatre theatre;
 }

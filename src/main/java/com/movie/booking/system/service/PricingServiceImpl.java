@@ -5,10 +5,11 @@ import com.movie.booking.system.model.Pricing;
 import com.movie.booking.system.model.Seat;
 import com.movie.booking.system.model.SeatType;
 import com.movie.booking.system.model.Show;
+import com.movie.booking.system.pattern.strategy.PricingStrategy;
+import com.movie.booking.system.pattern.strategy.PricingStrategyFactory;
 import com.movie.booking.system.repository.PricingRepository;
-import com.movie.booking.system.strategy.PricingStrategy;
-import com.movie.booking.system.strategy.PricingStrategyFactory;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+
+@Service
 public class PricingServiceImpl implements PricingService {
     private final static Double TAX_RATE = 0.18;
     private final PricingRepository pricingRepository;

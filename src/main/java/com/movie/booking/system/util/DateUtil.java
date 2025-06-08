@@ -24,4 +24,8 @@ public class DateUtil {
 
         return new DateTime(legacyDate);
     }
+
+    public static Date getDateByDateTime(DateTime dateTime) {
+        return dateTime.toDate();
+    }
 }

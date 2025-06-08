@@ -12,9 +12,10 @@ public class Seat {
 
     private final ConcurrentHashMap<String, ReentrantLock> lockMap = new ConcurrentHashMap<>();
     private String id;
-    private Integer seatNumber;
+    private int seatNumber;
     private SeatType type;
     private SeatStatus status;
+    private double price = 0.0;
 
     public boolean isAvailable() {
         return this.status == SeatStatus.AVAILABLE;

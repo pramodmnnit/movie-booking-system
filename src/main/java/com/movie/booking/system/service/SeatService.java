@@ -20,4 +20,7 @@ public interface SeatService {
     void releaseSeats(List<Seat> seats) throws InvalidSeatException;
 
     List<ReentrantLock> getSeatLocks(List<Seat> seats, Show show, Date showDate) throws UnavailableSeatException, InterruptedException;
+
+    List<Seat> getSeatsByIds(List<String> seatIds);
+
 }

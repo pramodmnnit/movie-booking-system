@@ -1,7 +1,9 @@
 package com.movie.booking.system.repository;
 
-public interface TheatreRepository {
-    TheatreRepository getTheatreById(String id);
+import com.movie.booking.system.model.Theatre;
 
-    TheatreRepository getTheatreByStatus(String status);
+public interface TheatreRepository {
+    void saveTheatre(Theatre theatre);
+
+    Theatre getTheatreById(String id);
 }

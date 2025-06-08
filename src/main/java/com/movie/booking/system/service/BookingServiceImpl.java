@@ -8,10 +8,12 @@ import com.movie.booking.system.model.*;
 import com.movie.booking.system.repository.BookingRepository;
 import com.movie.booking.system.util.DateUtil;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
+@Service
 public class BookingServiceImpl implements BookingService {
 
     private final PricingService pricingService;
@@ -28,19 +30,19 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking createBooking(User user, Show show, List<Seat> seats, Date showDate) throws UnavailableSeatException, InvalidPricingException, InvalidBookingException, InvalidSeatException, InterruptedException {
+    public Booking createBooking(User user, Show show, List<Seat> seats, Date showDate, Theatre theatre, Screen screen) throws UnavailableSeatException, InvalidPricingException, InvalidBookingException, InvalidSeatException, InterruptedException {
         List<ReentrantLock> reentrantLocks = new ArrayList<>();
         Booking booking = null;
         try {
             reentrantLocks = seatService.getSeatLocks(seats, show, showDate);
             seatService.validateSeats(seats);
             DateTime startDateTime = DateUtil.getDateTimeByDateAndTime(showDate, show.getStartTime());
-            DateTime endDateTime = DateUtil.getDateTimeByDateAndTime(showDate, show.getEndTime());
-            Map<SeatType, Pricing> seatTypeToPricingMap = pricingService.getSeatTypeToPricingMap(startDateTime, endDateTime, show.getId());
-            Double totalAmount = 0.0;
-            Double amount = 0.0;
+            Double totalAmount;
+            double amount = 0.0;
             for (Seat seat : seats) {
-                amount += pricingService.calculatePriceWithStrategy(seat, show, startDateTime);
+                double price = pricingService.calculatePriceWithStrategy(seat, show, startDateTime);
+                seat.setPrice(price);
+                amount += price;
             }
             totalAmount = amount;
             Double taxAmount = pricingService.getTaxAmount(totalAmount);
@@ -54,10 +56,12 @@ public class BookingServiceImpl implements BookingService {
                 booking.setUser(user);
                 booking.setShowDate(startDateTime);
                 booking.setTax(taxAmount);
-                booking.setCratedAt(new DateTime());
+                booking.setCreatedAt(new DateTime());
                 booking.setUpdatedAt(new DateTime());
                 booking.setTotalAmount(pricingService.getTotalAmount(totalAmount, taxAmount));
                 booking.setStatus(BookingStatus.CONFIRMED);
+                booking.setTheatre(theatre);
+                booking.setScreen(screen);
                 bookingRepository.saveBooking(booking);
             } catch (Exception e) {
                 if (booking != null) {
@@ -75,7 +79,7 @@ public class BookingServiceImpl implements BookingService {
 
 
     @Override
-    public void cancelBooking(String bookingId) throws InvalidBookingException, InvalidSeatException {
+    public Booking cancelBooking(String bookingId) throws InvalidBookingException, InvalidSeatException {
         Booking booking = bookingRepository.getBookingById(bookingId);
         if (Objects.isNull(booking)) {
             throw new InvalidBookingException(String.format("Booking not found for the given booking id %s", bookingId));
@@ -88,10 +92,16 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setStatus(BookingStatus.CANCELLED);
         bookingRepository.saveBooking(booking);
+        return booking;
     }
 
     @Override
     public Booking getBookingById(String bookingId) throws InvalidBookingException {
         return bookingRepository.getBookingById(bookingId);
+    }
+
+    @Override
+    public List<Booking> getBookingsByUserId(User user) {
+        return bookingRepository.getBookingsByUserId(user.getId());
     }
 }

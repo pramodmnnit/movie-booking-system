@@ -1,4 +1,4 @@
-package com.movie.booking.system.strategy;
+package com.movie.booking.system.pattern.strategy;
 
 import com.movie.booking.system.model.Seat;
 import com.movie.booking.system.model.SeatType;

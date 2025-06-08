@@ -3,11 +3,15 @@ package com.movie.booking.system.repository;
 import com.movie.booking.system.exception.InvalidSeatException;
 import com.movie.booking.system.model.Seat;
 import com.movie.booking.system.model.SeatType;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
+@Repository
 public class SeatRepositoryImpl implements SeatRepository {
 
     private final Map<String, Seat> seatMap = new HashMap<>();
@@ -36,5 +40,13 @@ public class SeatRepositoryImpl implements SeatRepository {
 
         seatMap.put(seat.getId(), seat);
 
+    }
+
+    @Override
+    public List<Seat> getSeatsByIds(List<String> seatIds) {
+        return seatIds.stream()
+                .map(seatMap::get)
+                .filter(Objects::nonNull)
+                .toList();
     }
 }

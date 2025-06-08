@@ -2,7 +2,10 @@ package com.movie.booking.system.service;
 
 import com.movie.booking.system.model.User;
 import com.movie.booking.system.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
+
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -17,7 +20,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(int id) {
+    public User getUserById(String id) {
         return userRepository.getUserById(id);
     }
 

@@ -2,11 +2,14 @@ package com.movie.booking.system.repository;
 
 import com.movie.booking.system.exception.InvalidBookingException;
 import com.movie.booking.system.model.Booking;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Repository
 public class BookingRepositoryImpl implements BookingRepository {
     private final Map<String, Booking> bookingMap = new HashMap<>();
 
@@ -27,5 +30,12 @@ public class BookingRepositoryImpl implements BookingRepository {
         }
         return booking;
 
+    }
+
+    @Override
+    public List<Booking> getBookingsByUserId(String id) {
+        return bookingMap.values().stream()
+                .filter(booking -> booking.getUser() != null && booking.getUser().getId().equals(id))
+                .toList();
     }
 }

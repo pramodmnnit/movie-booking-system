@@ -10,6 +10,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class MovieServiceTest {
 
     private MovieService movieService;
@@ -48,10 +50,7 @@ public class MovieServiceTest {
         this.movieService.saveMovie(activeMovie);
 
         Movie inactiveMovie = getInactiveMovie();
-
         this.movieService.saveMovie(inactiveMovie);
-
-
     }
 
     @AfterEach
@@ -62,22 +61,51 @@ public class MovieServiceTest {
     @Test
     void getActiveMovieByName() {
         Movie movie = movieService.getMovieByName("Inception");
-        assert movie != null;
-        assert movie.getStatus() == MovieStatus.ACTIVE;
+        assertNotNull(movie, "Movie should not be null");
+        assertEquals(MovieStatus.ACTIVE, movie.getStatus(), "Movie status should be ACTIVE");
+        assertEquals("Inception", movie.getName(), "Movie name should match");
+        assertEquals(148, movie.getDuration(), "Movie duration should match");
     }
 
     @Test
     void getInactiveMovieByName() {
         Movie movie = movieService.getMovieByName("The Dark Knight");
-        assert movie == null;
+        assertNull(movie, "Inactive movie should not be returned");
     }
 
     @Test
     void saveNullMovie() {
-        try {
-            movieService.saveMovie(null);
-        } catch (InvalidMovieException e) {
-            assert e.getMessage().equals("Movie cannot be null");
-        }
+        InvalidMovieException exception = assertThrows(InvalidMovieException.class,
+                () -> movieService.saveMovie(null),
+                "Saving null movie should throw InvalidMovieException");
+        assertEquals("Movie cannot be null or have empty fields", exception.getMessage(), "Exception message should match");
+    }
+
+    @Test
+    void getMovieByNonExistentName() {
+        Movie movie = movieService.getMovieByName("NonExistentMovie");
+        assertNull(movie, "Non-existent movie should return null");
+    }
+
+    @Test
+    void saveMovieWithNullName() {
+        Movie movie = getActiveMovie();
+        movie.setName(null);
+
+        InvalidMovieException exception = assertThrows(InvalidMovieException.class,
+                () -> movieService.saveMovie(movie),
+                "Saving movie with null name should throw InvalidMovieException");
+        assertEquals("Movie cannot be null or have empty fields", exception.getMessage(), "Exception message should match");
+    }
+
+    @Test
+    void saveMovieWithEmptyName() {
+        Movie movie = getActiveMovie();
+        movie.setName("");
+
+        InvalidMovieException exception = assertThrows(InvalidMovieException.class,
+                () -> movieService.saveMovie(movie),
+                "Saving movie with empty name should throw InvalidMovieException");
+        assertEquals("Movie cannot be null or have empty fields", exception.getMessage(), "Exception message should match");
     }
 }

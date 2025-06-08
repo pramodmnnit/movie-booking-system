@@ -4,6 +4,8 @@ import com.movie.booking.system.exception.InvalidSeatException;
 import com.movie.booking.system.model.Seat;
 import com.movie.booking.system.model.SeatType;
 
+import java.util.List;
+
 public interface SeatRepository {
     Seat getSeatById(String id);
 
@@ -13,4 +15,5 @@ public interface SeatRepository {
 
     void saveSeat(Seat seat) throws InvalidSeatException;
 
+    List<Seat> getSeatsByIds(List<String> seatIds);
 }

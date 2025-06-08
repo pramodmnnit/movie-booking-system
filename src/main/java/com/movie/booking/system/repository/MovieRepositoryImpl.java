@@ -3,11 +3,13 @@ package com.movie.booking.system.repository;
 import com.movie.booking.system.exception.InvalidMovieException;
 import com.movie.booking.system.model.Movie;
 import com.movie.booking.system.model.MovieStatus;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Repository
 public class MovieRepositoryImpl implements MovieRepository {
 
     private final Map<String, Movie> movieMap = new HashMap<>();
